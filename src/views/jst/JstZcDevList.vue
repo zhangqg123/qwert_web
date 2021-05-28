@@ -261,9 +261,10 @@
           this.loading = false;
           return;
         }
+        that.$message.success("开始读取数据");
         multipleRead(params).then((res)=>{
           if(res.success){
-            that.$message.success("开始读取数据");
+  //          that.$message.success("开始读取数据");
             that.runflag=res.flag;
           }
         }).finally(() => {

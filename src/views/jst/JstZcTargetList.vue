@@ -9,33 +9,36 @@
               <j-input placeholder="请输入指标名称" v-model="queryParam.targetName"></j-input>
             </a-form-item>
           </a-col> -->
-          <a-col :md="6" :sm="8">
-            <a-form-item label="单位用户">
+          <a-col :md="4" :sm="6">
+            <a-form-item label="用户">
               <j-dict-select-tag @change="handleChangeOrgUser" dictCode="jst_zc_orguser,orguser_name,orguser_id" v-model="queryParam.orgUser" :triggerChange="true" placeholder="请输入单位" />
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="8">
+          <a-col :md="4" :sm="8">
             <a-form-item label="报警点">
               <!--            <a-input placeholder="请输入模型编号" v-model="queryParam.devicemodel"></a-input>  -->
               <j-dict-select-tag v-model="queryParam.alarmPoint" placeholder="请选择报警点" dictCode="alarm_point"/>
             </a-form-item>
           </a-col>
+          <a-col :md="5" :sm="8">
+            <a-form-item label="类型">
+              <j-dict-select-tag @change="handleChangeType" :triggerChange="true" v-model="queryParam.devType" placeholder="请选择分类" :dictCode="dictCode2.val" />
+            </a-form-item>
+          </a-col>
           <a-col :md="6" :sm="8">
-            <a-form-item label="设备类型">
-              <!--            <a-input placeholder="请输入模型编号" v-model="queryParam.devicemodel"></a-input>
-              <j-dict-select-tag v-model="queryParam.devType" placeholder="请选择分类" dictCode="jst_zc_cat,zc_catname,origin_id ,has_child ='0'&&id>'002' order by pid "/> -->
-              <j-dict-select-tag v-model="queryParam.devType" placeholder="请选择分类" :dictCode="dictCode2.val" />
+            <a-form-item label="设备">
+              <j-dict-select-tag v-model="queryParam.devNo" placeholder="请选择名称"  :dictCode="dictCode3.val"/>
             </a-form-item>
           </a-col>
 
-          <a-col :md="6" :sm="8" >
+          <a-col :md="4" :sm="8" >
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
+         <!--     <a @click="handleToggleSearch" style="margin-left: 8px">
                 {{ toggleSearchStatus ? '收起' : '展开' }}
                 <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
+              </a>-->
             </span>
           </a-col>
         </a-row>
@@ -139,6 +142,9 @@
         description: 'jst_zc_target管理页面',
         dictCode2: {
           val:"jst_zc_cat,zc_catname,origin_id ,has_child ='0'&&id>'002' order by pid "
+        },        // 表头
+        dictCode3: {
+          val:"jst_zc_dev,dev_name,dev_no,org_user='guangfa'"
         },        // 表头
         // 表头
         columns: [
@@ -281,13 +287,31 @@
       },
       handleChangeOrgUser(value){
         var tmp=null;
+        var tmp2=null;
         if(value!=null){
           tmp = "jst_zc_cat,zc_catname,origin_id,org_user= '"+value+"'&&has_child ='0'&&id>'002' order by pid ";
+          tmp2 = "jst_zc_dev,dev_name,dev_no,org_user= '"+value+"'";
         }else{
           tmp = "jst_zc_cat,zc_catname,origin_id,has_child ='0'&&id>'002' order by pid ";
+          tmp2 = "jst_zc_dev,dev_name,dev_no,org_user= 'guangfa'";
         }
         this.queryParam.orgUser=value;
+//        this.queryParam.devType=null;
+//        this.queryParam.devNo=null;
         this.$set(this.dictCode2, "val", tmp);
+        this.$set(this.dictCode3, "val", tmp2);
+      },
+      handleChangeType(value){
+        var tmp2=null;
+        var orgUser=this.queryParam.orgUser;
+        if(orgUser!=null && value!=null){
+          tmp2 = "jst_zc_dev,dev_name,dev_no,org_user= '"+orgUser+"'&&dev_cat='"+value+"'";
+        }else{
+          tmp2 = "jst_zc_dev,dev_name,dev_no,org_user= 'guangfa'";
+        }
+//        this.queryParam.orgUser=value;
+        this.queryParam.devType=value;
+        this.$set(this.dictCode3, "val", tmp2);
       },
       initDictConfig(){
       }

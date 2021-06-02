@@ -277,77 +277,33 @@
               }
               that.dataSource = that.dataSource.filter(item => item);
               if (resdata.length > 0) {
-                if(resdata[0].instruct==null){
+                if(resdata[0].indexOf("gf")!=-1){
                   for (var j = 0; j < resdata.length; j++) {
                     var r1=resdata[j];
-                    if(r1.indexOf('{')!=-1){
-                      r1=r1.replace(/\s*/g,"");
-                      var r2=r1.substring(1,r1.length-1);
-                      var r3=r2.split(',');
-                      for(var k=0;k<r3.length;k++){
-                        var r4=r3[k].split('=');
-//                        var tmpint=0;
-                        for (var m = 0; m < that.dataSource.length; m++) {
+                    if(r1.indexOf("{")!=-1){
+                      r1=r1.substring(1,r1.length-1);
+                    }
+                    r1=r1.replace(/\s*/g,"");
+                    var r2=r1.split('=');
+                    for (var m = 0; m < that.dataSource.length; m++) {
 
-                          if(r4[0]==that.dataSource[m].id){
-                            if((that.dataSource[m].infoType=="状态量"||that.dataSource[m].infoType=="digital")
-                              &&((that.dataSource[m].interceptBit!=null&&
-                                that.dataSource[m].interceptBit.indexOf('bitIndex')!=-1)||
-                              that.dataSource[m].address.indexOf('.'!=null))){
-                              var tmpinstruct=that.dataSource[m].instruct;
-                              var tmpaddress=that.dataSource[m].address;
-                              let filterList=null;
-                              if(tmpaddress.indexOf('.')!=-1){
-                                var ta=tmpaddress.split('.');
-                                tmpaddress=ta[0];
-                                filterList = that.dataSource.filter(i => i.address.substring(0,4) === tmpaddress)
-                              }else{
-                                filterList = that.dataSource.filter(i => i.address === tmpaddress)
-                              }
-                              var tmpint=parseInt(r4[1]).toString(2);
-                              var a0=(Array(16).join(0) + tmpint).slice(-16);
-                              for(var n=0;n<filterList.length;n++){
-                                var item=filterList[n];
-                        //        if(item.instruct!=tmpinstruct||item.address!=tmpaddress ){
-                        //          break;
-                        //        };
-     //                           var tmpint=parseInt(r4[1]).toString(2);
-     //                           var a0=(Array(16).join(0) + tmpint).slice(-16);
-                                var a1=item.interceptBit;
-                                if(a1!=null){
-                                  var a2=a1.split(',');
-                                  var a3=a2[0].split(':');
-                                  var a4=parseInt(a3[1]);
-                                  var a5=15-a4;
-                                  item.dataReturn=a0.substring(a5,a5+1);
-                                }
-                                if(item.address.indexOf('.')!=-1){
-                                  var a2=item.address.split('.');
-                                  var a4=parseInt(a2[1]);
-                                  var a5=15-a4;
-                                  item.dataReturn=a0.substring(a5,a5+1);
-                                }
-                              }
-                            }else {
-                              var yinzi=that.dataSource[m].yinzi;
-                              if(yinzi!=null){
-                                var dr=parseInt(r4[1])/parseInt(yinzi);
-                                that.dataSource[m].dataReturn=dr;
-                              }else{
-                                that.dataSource[m].dataReturn=r4[1];
-                              }
-
-                            }
-
-                            break;
+                      if(r2[0]==that.dataSource[m].id){
+                        var tmpaddress=that.dataSource[m].address;
+                        let filterList=null;
+                        if(tmpaddress.indexOf('.')!=-1){
+                          var ta=tmpaddress.split('.');
+                          tmpaddress=ta[0];
+                          filterList = that.dataSource.filter(i => i.address.substring(0,4) === tmpaddress)
+                          var tmpint=parseInt(r2[1]).toString(2);
+                          var a0=(Array(16).join(0) + tmpint).slice(-16);
+                          for(var n=0;n<filterList.length;n++){
+                             var item=filterList[n];
+                             var a2=item.address.split('.');
+                             var a4=parseInt(a2[1]);
+                             var a5=15-a4;
+                             item.dataReturn=a0.substring(a5,a5+1);
                           }
-                        }
-                      }
-                    }else{
-                      r1=r1.replace(/\s*/g,"");
-                      var r2=r1.split('=');
-                      for (var m = 0; m < that.dataSource.length; m++) {
-                        if(r2[0]==that.dataSource[m].instruct){
+                        }else{
                           that.dataSource[m].dataReturn=r2[1];
                           break;
                         }
@@ -355,23 +311,102 @@
                     }
                   }
                 }else{
-                  for (var j = 0; j < resdata.length; j++) {
-                    for (var i = 0; i < that.dataSource.length; i++) {
-                      if (that.dataSource[i].targetNo == resdata[j].targetNo) {
-                        let r1 = resdata[j].resData;
-                        let r2 = r1.substring(1, r1.length - 1);
-                        //         for (var k = 0; k < rlist.length; k++) {
-                          var yinzi=that.dataSource[i].yinzi;
-                          if(yinzi!=null){
-                            var dr=parseInt(r2)/parseInt(yinzi);
-                            that.dataSource[i].dataReturn=dr;
-                          }else{
-                            that.dataSource[i].dataReturn=r2;
-                          }
+                  if(resdata[0].instruct==null){
+                    for (var j = 0; j < resdata.length; j++) {
+                      var r1=resdata[j];
+                      if(r1.indexOf('{')!=-1){
+                        r1=r1.replace(/\s*/g,"");
+                        var r2=r1.substring(1,r1.length-1);
+                        var r3=r2.split(',');
+                        for(var k=0;k<r3.length;k++){
+                          var r4=r3[k].split('=');
+  //                        var tmpint=0;
+                          for (var m = 0; m < that.dataSource.length; m++) {
 
-  //                        that.dataSource[i + k].dataReturn = rlist[k];
-   //                     }
-                        break;
+                            if(r4[0]==that.dataSource[m].id){
+                              if((that.dataSource[m].infoType=="状态量"||that.dataSource[m].infoType=="digital")
+                                &&((that.dataSource[m].interceptBit!=null&&
+                                  that.dataSource[m].interceptBit.indexOf('bitIndex')!=-1)||
+                                that.dataSource[m].address.indexOf('.'!=null))){
+                                var tmpinstruct=that.dataSource[m].instruct;
+                                var tmpaddress=that.dataSource[m].address;
+                                let filterList=null;
+                                if(tmpaddress.indexOf('.')!=-1){
+                                  var ta=tmpaddress.split('.');
+                                  tmpaddress=ta[0];
+                                  filterList = that.dataSource.filter(i => i.address.substring(0,4) === tmpaddress)
+                                }else{
+                                  filterList = that.dataSource.filter(i => i.address === tmpaddress)
+                                }
+                                var tmpint=parseInt(r4[1]).toString(2);
+                                var a0=(Array(16).join(0) + tmpint).slice(-16);
+                                for(var n=0;n<filterList.length;n++){
+                                  var item=filterList[n];
+                          //        if(item.instruct!=tmpinstruct||item.address!=tmpaddress ){
+                          //          break;
+                          //        };
+       //                           var tmpint=parseInt(r4[1]).toString(2);
+       //                           var a0=(Array(16).join(0) + tmpint).slice(-16);
+                                  var a1=item.interceptBit;
+                                  if(a1!=null){
+                                    var a2=a1.split(',');
+                                    var a3=a2[0].split(':');
+                                    var a4=parseInt(a3[1]);
+                                    var a5=15-a4;
+                                    item.dataReturn=a0.substring(a5,a5+1);
+                                  }
+                                  if(item.address.indexOf('.')!=-1){
+                                    var a2=item.address.split('.');
+                                    var a4=parseInt(a2[1]);
+                                    var a5=15-a4;
+                                    item.dataReturn=a0.substring(a5,a5+1);
+                                  }
+                                }
+                              }else {
+                                var yinzi=that.dataSource[m].yinzi;
+                                if(yinzi!=null){
+                                  var dr=parseInt(r4[1])/parseInt(yinzi);
+                                  that.dataSource[m].dataReturn=dr;
+                                }else{
+                                  that.dataSource[m].dataReturn=r4[1];
+                                }
+
+                              }
+
+                              break;
+                            }
+                          }
+                        }
+                      }else{
+                        r1=r1.replace(/\s*/g,"");
+                        var r2=r1.split('=');
+                        for (var m = 0; m < that.dataSource.length; m++) {
+                          if(r2[0]==that.dataSource[m].instruct){
+                            that.dataSource[m].dataReturn=r2[1];
+                            break;
+                          }
+                        }
+                      }
+                    }
+                  }else{
+                    for (var j = 0; j < resdata.length; j++) {
+                      for (var i = 0; i < that.dataSource.length; i++) {
+                        if (that.dataSource[i].targetNo == resdata[j].targetNo) {
+                          let r1 = resdata[j].resData;
+                          let r2 = r1.substring(1, r1.length - 1);
+                          //         for (var k = 0; k < rlist.length; k++) {
+                            var yinzi=that.dataSource[i].yinzi;
+                            if(yinzi!=null){
+                              var dr=parseInt(r2)/parseInt(yinzi);
+                              that.dataSource[i].dataReturn=dr;
+                            }else{
+                              that.dataSource[i].dataReturn=r2;
+                            }
+
+    //                        that.dataSource[i + k].dataReturn = rlist[k];
+     //                     }
+                          break;
+                        }
                       }
                     }
                   }

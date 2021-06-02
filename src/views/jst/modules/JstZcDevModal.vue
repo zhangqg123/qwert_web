@@ -41,8 +41,8 @@
         </a-form-item>
         <a-form-item label="连接类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <!--      <a-input v-decorator="[ 'type', {}]" placeholder="请输入连接类型"></a-input> -->
-          <j-dict-select-tag @change="handleChangeProtocolType" v-decorator="['type', {}]" :triggerChange="true" placeholder="请输入协议类型"
-                             dictCode="pro_type"/>
+          <j-dict-select-tag @change="handleChangeProtocolType" v-decorator="['type', {}]" :triggerChange="true" placeholder="请输入连接类型"
+                             dictCode="conn_type"/>
         </a-form-item>
         <a-form-item v-if="contype==='MODBUSTCP'||contype==='SOCKET'||contype==='SNMP'" label="ip地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input v-decorator="[ 'ipAddress', {}]" placeholder="请输入ip地址"></a-input>
@@ -76,6 +76,10 @@
         </a-form-item>
         <a-form-item v-if="contype==='SNMP'" label="版本号" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input v-decorator="[ 'version', {}]" placeholder="请输入版本号"></a-input>
+        </a-form-item>
+        <a-form-item label="协议类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <j-dict-select-tag v-decorator="['proType', {}]" :triggerChange="true"  placeholder="请输入协议类型"
+                             dictCode="pro_type"/>
         </a-form-item>
         <a-form-item label="超时" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input v-decorator="[ 'timeOut', validatorRules.timeOut]" placeholder="请输入超时"></a-input>
@@ -175,7 +179,7 @@
         if(!record.id){
           this.visible = true;
           this.$nextTick(() => {
-            this.form.setFieldsValue(pick(this.model,'orgUser','devName','devCat','devNo','modNo','status','position','type','extInfo','conInfo','proInfo','remark'))
+            this.form.setFieldsValue(pick(this.model,'orgUser','devName','devCat','devNo','modNo','status','position','extInfo','conInfo','proInfo','remark'))
           })
         }else{
           this.handleChangeOrgUser(this.model.orgUser);
@@ -183,13 +187,14 @@
           if(tempInfo==null) {
             this.visible = true;
             this.$nextTick(() => {
-              this.form.setFieldsValue(pick(this.model,'orgUser','devName','devCat','devNo','modNo','status','position','type','extInfo','conInfo','proInfo','remark'))
+              this.form.setFieldsValue(pick(this.model,'orgUser','devName','devCat','devNo','modNo','status','position','extInfo','conInfo','proInfo','remark'))
             })
 
           }else{
             this.model.ipAddress = tempInfo.ipAddress;
             this.model.port = tempInfo.port;
             this.model.type = tempInfo.type;
+            this.model.proType = tempInfo.proType;
             this.model.retry = tempInfo.retry;
             this.model.sleeptime = tempInfo.sleeptime;
             this.model.timeOut = tempInfo.timeOut;
@@ -213,17 +218,17 @@
             this.visible = true;
             if (this.model.type == "MODBUSTCP" || this.model.type == "SOCKET") {
               this.$nextTick(() => {
-                this.form.setFieldsValue(pick(this.model,'orgUser', 'devName', 'devCat', 'devNo', 'modNo', 'status', 'position', 'extInfo', 'conInfo', 'ipAddress', 'port', 'type', 'slave', 'packageBit', 'bitNumber', 'retry', 'sleeptime', 'timeOut', 'proInfo', 'remark'))
+                this.form.setFieldsValue(pick(this.model,'orgUser', 'devName', 'devCat', 'devNo', 'modNo', 'status', 'position', 'extInfo', 'conInfo', 'ipAddress', 'port', 'type', 'slave', 'packageBit', 'bitNumber','proType', 'retry', 'sleeptime', 'timeOut', 'proInfo', 'remark'))
               })
             }
             if (this.model.type == "MODBUSRTU" || this.model.type == "MODBUSASCII") {
               this.$nextTick(() => {
-                this.form.setFieldsValue(pick(this.model,'orgUser', 'devName', 'devCat', 'devNo', 'modNo', 'status', 'position', 'extInfo', 'conInfo', 'type', 'com', 'baudRate', 'dataBits', 'stopBits', 'parity', 'slave', 'packageBit', 'bitNumber', 'retry', 'sleeptime', 'timeOut', 'proInfo', 'remark'))
+                this.form.setFieldsValue(pick(this.model,'orgUser', 'devName', 'devCat', 'devNo', 'modNo', 'status', 'position', 'extInfo', 'conInfo', 'type', 'com', 'baudRate', 'dataBits', 'stopBits', 'parity', 'slave', 'packageBit', 'bitNumber','proType', 'retry', 'sleeptime', 'timeOut', 'proInfo', 'remark'))
               })
             }
             if (this.model.type == "SNMP") {
               this.$nextTick(() => {
-                this.form.setFieldsValue(pick(this.model, 'orgUser','devName', 'devCat', 'devNo', 'modNo', 'status', 'position', 'extInfo', 'conInfo', 'ipAddress', 'port', 'type', 'retry', 'sleeptime', 'timeOut', 'proInfo', 'remark', 'version'))
+                this.form.setFieldsValue(pick(this.model, 'orgUser','devName', 'devCat', 'devNo', 'modNo', 'status', 'position', 'extInfo', 'conInfo', 'ipAddress', 'port', 'type','proType', 'retry', 'sleeptime', 'timeOut', 'proInfo', 'remark', 'version'))
               })
             }
           }
@@ -255,6 +260,7 @@
 //              tempConInfo=JSON.parse(values.conInfo);
 //            }
             tempConInfo.type=values.type;
+            tempConInfo.proType=values.proType;
 
             tempConInfo.ipAddress=tip;
             tempConInfo.port=tport;

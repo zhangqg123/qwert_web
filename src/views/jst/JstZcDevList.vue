@@ -11,7 +11,7 @@
           </a-col>
           <a-col :md="6" :sm="8">
             <a-form-item label="设备位置">
-              <j-dict-select-tag v-model="queryParam.devPos" placeholder="请选择位置" dictCode="jst_zc_position,pos_name,pos_id"/>
+              <j-dict-select-tag v-model="queryParam.devPos" placeholder="请选择位置" :dictCode="dictCode4.val"/>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="8">
@@ -150,6 +150,9 @@
         description: 'jst_zc_dev管理页面',
         dictCode2: {
           val:"jst_zc_cat,zc_catname,origin_id ,has_child ='0'&&id>'002' order by pid "
+        },        // 表头
+        dictCode4: {
+          val:"jst_zc_position,pos_name,pos_id "
         },        // 表头
         columns: [
           {
@@ -298,14 +301,18 @@
       },
       handleChangeOrgUser(value){
         var tmp=null;
+        var tmp2=null;
         if(value!=null){
           tmp = "jst_zc_cat,zc_catname,origin_id,org_user= '"+value+"'&&has_child ='0'&&id>'002' order by pid ";
+          tmp2 = "jst_zc_position,pos_name,pos_id,org_user= '"+value+"'";
         }else{
           tmp = "jst_zc_cat,zc_catname,origin_id,has_child ='0'&&id>'002' order by pid ";
+          tmp2 = "jst_zc_position,pos_name,pos_id ";
         }
         this.queryParam.orgUser=value;
 //        this.queryParam.devCat='';
         this.$set(this.dictCode2, "val", tmp);
+        this.$set(this.dictCode4, "val", tmp2);
       }
     }
   }

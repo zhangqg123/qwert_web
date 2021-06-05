@@ -84,4 +84,5 @@ function main() {
     },
     render: h => h(App)
   }).$mount('#app')
+
 }

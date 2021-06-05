@@ -363,5 +363,8 @@ export const constantRouterMap = [
     path: '/404',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
   },
-
+//  {
+//    path: '/jst/QwertFcList/',
+//    component: () => import(/* webpackChunkName: "fail" */ '@/views/jst/QwertFcList')
+//  },
 ]

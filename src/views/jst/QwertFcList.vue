@@ -11,19 +11,19 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
+  <!--    <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button> -->
       <a-button type="primary" icon="download" @click="handleExportXls('qwert_fc')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
       <!-- 高级查询区域 -->
-      <j-super-query :fieldList="superFieldList" ref="superQueryModal" @handleSuperQuery="handleSuperQuery"></j-super-query>
+ <!--     <j-super-query :fieldList="superFieldList" ref="superQueryModal" @handleSuperQuery="handleSuperQuery"></j-super-query>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
         </a-menu>
         <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
-      </a-dropdown>
+      </a-dropdown> -->
     </div>
 
     <!-- table区域-begin -->
@@ -67,7 +67,7 @@
             下载
           </a-button>
         </template>
-
+<!--
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
@@ -86,7 +86,7 @@
             </a-menu>
           </a-dropdown>
         </span>
-
+-->
       </a-table>
     </div>
     <router-view :key="key"></router-view>
@@ -136,14 +136,6 @@
             dataIndex: 'targetName'
           },
           {
-            title:'时间',
-            align:"center",
-            dataIndex: 'time',
-            customRender:function (text) {
-              return !text?"":(text.length>10?text.substr(0,10):text)
-            }
-          },
-          {
             title:'数据点编号',
             align:"center",
             dataIndex: 'tagName'
@@ -154,13 +146,22 @@
             dataIndex: 'pv'
           },
           {
+            title:'时间',
+            align:"center",
+            dataIndex: 'time',
+            customRender:function (text) {
+              return !text?"":text
+            }
+          },
+
+          /*          {
             title: '操作',
             dataIndex: 'action',
             align:"center",
             fixed:"right",
             width:147,
             scopedSlots: { customRender: 'action' }
-          }
+          } */
         ],
         url: {
           list: "/jst/qwertFc/list",
@@ -193,6 +194,9 @@
     },
     methods: {
       loadData(arg) {
+        if(arg==null){
+          return;
+        }
         var code=this.$route.params.code;
         if(!this.url.list){
           this.$message.error("请设置url.list属性!")

@@ -206,7 +206,7 @@
     methods: {
 
       //筛选需要重写handleTableChange
-      handleTableChange(pagination, filters, sorter) {
+/*      handleTableChange(pagination, filters, sorter) {
         //分页、排序、筛选变化时触发
         //TODO 筛选
         if (Object.keys(sorter).length > 0) {
@@ -217,7 +217,7 @@
         this.filters.status = filters.status[0];
         this.ipagination = pagination;
         this.loadData();
-      },
+      },  */
       pauseJob: function(record){
         var that = this;
         //暂停定时任务

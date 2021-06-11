@@ -284,28 +284,31 @@
                       r1=r1.substring(1,r1.length-1);
                     }
                     r1=r1.replace(/\s*/g,"");
-                    var r2=r1.split('=');
-                    for (var m = 0; m < that.dataSource.length; m++) {
+                    var rt=r1.split(",");
+                    for (var k=0;k<rt.length;k++){
+                      var r2=rt[k].split('=');
+                      for (var m = 0; m < that.dataSource.length; m++) {
 
-                      if(r2[0]==that.dataSource[m].id){
-                        var tmpaddress=that.dataSource[m].address;
-                        let filterList=null;
-                        if(tmpaddress.indexOf('.')!=-1){
-                          var ta=tmpaddress.split('.');
-                          tmpaddress=ta[0];
-                          filterList = that.dataSource.filter(i => i.address.substring(0,4) === tmpaddress)
-                          var tmpint=parseInt(r2[1]).toString(2);
-                          var a0=(Array(16).join(0) + tmpint).slice(-16);
-                          for(var n=0;n<filterList.length;n++){
-                             var item=filterList[n];
-                             var a2=item.address.split('.');
-                             var a4=parseInt(a2[1]);
-                             var a5=15-a4;
-                             item.dataReturn=a0.substring(a5,a5+1);
+                        if(r2[0]==that.dataSource[m].id){
+                          var tmpaddress=that.dataSource[m].address;
+                          let filterList=null;
+                          if(tmpaddress.indexOf('.')!=-1&&tmpaddress.length>5){
+                            var ta=tmpaddress.split('.');
+                            tmpaddress=ta[0];
+                            filterList = that.dataSource.filter(i => i.address.substring(0,4) === tmpaddress)
+                            var tmpint=parseInt(r2[1]).toString(2);
+                            var a0=(Array(16).join(0) + tmpint).slice(-16);
+                            for(var n=0;n<filterList.length;n++){
+                               var item=filterList[n];
+                               var a2=item.address.split('.');
+                               var a4=parseInt(a2[1]);
+                               var a5=15-a4;
+                               item.dataReturn=a0.substring(a5,a5+1);
+                            }
+                          }else{
+                            that.dataSource[m].dataReturn=r2[1];
+                            break;
                           }
-                        }else{
-                          that.dataSource[m].dataReturn=r2[1];
-                          break;
                         }
                       }
                     }
@@ -330,36 +333,21 @@
                                 that.dataSource[m].address.indexOf('.'!=null))){
                                 var tmpinstruct=that.dataSource[m].instruct;
                                 var tmpaddress=that.dataSource[m].address;
-                                let filterList=null;
-                                if(tmpaddress.indexOf('.')!=-1){
-                                  var ta=tmpaddress.split('.');
-                                  tmpaddress=ta[0];
-                                  filterList = that.dataSource.filter(i => i.address.substring(0,4) === tmpaddress)
-                                }else{
-                                  filterList = that.dataSource.filter(i => i.address === tmpaddress)
-                                }
+                                let filterList={};
+                                filterList = that.dataSource.filter(item => item.address === tmpaddress);
                                 var tmpint=parseInt(r4[1]).toString(2);
                                 var a0=(Array(16).join(0) + tmpint).slice(-16);
                                 for(var n=0;n<filterList.length;n++){
                                   var item=filterList[n];
-                          //        if(item.instruct!=tmpinstruct||item.address!=tmpaddress ){
-                          //          break;
-                          //        };
-       //                           var tmpint=parseInt(r4[1]).toString(2);
-       //                           var a0=(Array(16).join(0) + tmpint).slice(-16);
                                   var a1=item.interceptBit;
-                                  if(a1!=null){
+                                  if(a1!=null && a1!=""){
                                     var a2=a1.split(',');
                                     var a3=a2[0].split(':');
                                     var a4=parseInt(a3[1]);
                                     var a5=15-a4;
                                     item.dataReturn=a0.substring(a5,a5+1);
-                                  }
-                                  if(item.address.indexOf('.')!=-1){
-                                    var a2=item.address.split('.');
-                                    var a4=parseInt(a2[1]);
-                                    var a5=15-a4;
-                                    item.dataReturn=a0.substring(a5,a5+1);
+                                  }else{
+                                    item.dataReturn=parseInt(r4[1]);
                                   }
                                 }
                               }else {

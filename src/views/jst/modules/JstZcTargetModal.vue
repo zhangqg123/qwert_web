@@ -26,23 +26,36 @@
         <a-form-item label="指标名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input v-decorator="[ 'targetName', validatorRules.targetName]" placeholder="请输入指标名称"></a-input>
         </a-form-item>
-        <a-form-item label="数据类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-      <!--    <a-input v-decorator="[ 'dataType', validatorRules.dataType]" placeholder="请输入数据类型"></a-input>  -->
-          <j-dict-select-tag :triggerChange="true"   v-decorator="['dataType', validatorRules.dataType]" placeholder="请输入地址类型"  dictCode="data_type"/>
+        <a-form-item label="信息点类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <j-dict-select-tag  @change="handleChangeInfoType" v-decorator="['infoType', {}]" :triggerChange="true" placeholder="请输入信息点类型"
+                              dictCode="info_type"/>
+        </a-form-item>
+        <a-form-item label="指令" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'instruct', validatorRules.instruct]" placeholder="请输入指令"></a-input>
         </a-form-item>
         <a-form-item label="寄存器地址" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input v-decorator="[ 'address', validatorRules.address]" placeholder="请输入寄存器地址"></a-input>
         </a-form-item>
-  <!--      <a-form-item label="地址类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <j-dict-select-tag :triggerChange="true"   v-decorator="['addressType', validatorRules.addressType]" placeholder="请输入地址类型"  dictCode="address_type"/>
-        </a-form-item>  -->
-        <a-form-item label="指令" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input v-decorator="[ 'instruct', validatorRules.instruct]" placeholder="请输入指令"></a-input>
+        <a-form-item label="数据类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <j-dict-select-tag :triggerChange="true"   v-decorator="['dataType', validatorRules.dataType]" placeholder="请输入地址类型"  dictCode="data_type"/>
         </a-form-item>
-        <a-form-item label="信息点类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-    <!--      <a-input v-decorator="[ 'infoType', validatorRules.infoType]" placeholder="请输入信息点类型"></a-input> -->
-          <j-dict-select-tag  v-decorator="['infoType', {}]" :triggerChange="true" placeholder="请输入信息点类型"
-                              dictCode="info_type"/>
+        <a-form-item v-if="infoType==='digital'" label="事件0到1"  :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'evt01', validatorRules.evt01]" placeholder="请输入"></a-input>
+        </a-form-item>
+        <a-form-item v-if="infoType==='digital'" label="事件1到0" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'evt10', validatorRules.evt10]" placeholder="请输入"></a-input>
+        </a-form-item>
+        <a-form-item v-if="infoType==='analog'" label="报警低限" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'valMin', validatorRules.valMin]" placeholder="请输入报警低限"></a-input>
+        </a-form-item>
+        <a-form-item v-if="infoType==='analog'" label="恢复低限" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'restoreMin', validatorRules.restoreMin]" placeholder="请输入恢复低限"></a-input>
+        </a-form-item>
+        <a-form-item v-if="infoType==='analog'" label="恢复高限" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'restoreMax', validatorRules.restoreMax]" placeholder="请输入恢复高限"></a-input>
+        </a-form-item>
+        <a-form-item v-if="infoType==='analog'" label="报警高限" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'valMax', validatorRules.valMax]" placeholder="请输入报警高限"></a-input>
         </a-form-item>
         <a-form-item label="报警点" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <!--      <a-input v-decorator="[ 'alarmPoint', validatorRules.alarmPoint]" placeholder="请输入控制上限"></a-input>
@@ -119,6 +132,7 @@
         title:"操作",
         width:800,
         visible: false,
+        infoType: null,
         model: {},
         labelCol: {
           xs: { span: 24 },
@@ -150,6 +164,18 @@
             ]},
           instruct: {rules: [
           ]},
+          evt01: {rules: [
+            ]},
+          evt10: {rules: [
+            ]},
+          valMin: {rules: [
+            ]},
+          restoreMin: {rules: [
+            ]},
+          restoreMax: {rules: [
+            ]},
+          valMax: {rules: [
+            ]},
           getTime: {rules: [
           ]},
           offset: {rules: [
@@ -191,8 +217,9 @@
         this.form.resetFields();
         this.model = Object.assign({}, record);
         this.visible = true;
+        this.infoType=this.model.infoType;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'devType','targetNo','targetName','unit','ifGet','dataType','proType','address','addressType','instruct','getTime','offset','len','interceptBit','espConfig','monitorType','infoType','infoDatatype','infoDataaccurate','alarmPoint','ctrlUp','ctrlDown','yinzi','targetOrder'))
+          this.form.setFieldsValue(pick(this.model,'devType','targetNo','targetName','unit','ifGet','dataType','proType','address','addressType','instruct','evt01','evt10','valMin','restoreMin','restoreMax','valMax','getTime','offset','len','interceptBit','espConfig','monitorType','infoType','infoDatatype','infoDataaccurate','alarmPoint','ctrlUp','ctrlDown','yinzi','targetOrder'))
         })
       },
       close () {
@@ -235,10 +262,11 @@
         this.close()
       },
       popupCallback(row){
-        this.form.setFieldsValue(pick(row,'devType','targetNo','targetName','unit','ifGet','dataType','proType','address','addressType','instruct','getTime','offset','len','interceptBit','espConfig','monitorType','infoType','infoDatatype','infoDataaccurate','alarmPoint','ctrlUp','ctrlDown','targetOrder'))
+        this.form.setFieldsValue(pick(row,'devType','targetNo','targetName','unit','ifGet','dataType','proType','address','addressType','instruct','evt01','evt10','valMin','restoreMin','restoreMax','valMax','getTime','offset','len','interceptBit','espConfig','monitorType','infoType','infoDatatype','infoDataaccurate','alarmPoint','ctrlUp','ctrlDown','targetOrder'))
       },
-
-
+      handleChangeInfoType(value){
+        this.infoType = value;
+      }
     }
   }
 </script>

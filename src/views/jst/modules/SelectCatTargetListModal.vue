@@ -328,21 +328,25 @@
 
                             if(r4[0]==that.dataSource[m].id){
                               if((that.dataSource[m].infoType=="状态量"||that.dataSource[m].infoType=="digital")
-                                &&((that.dataSource[m].interceptBit!=null&&
-                                  that.dataSource[m].interceptBit.indexOf('bitIndex')!=-1)||
-                                that.dataSource[m].address.indexOf('.'!=null))){
+                                &&(
+                   //               (that.dataSource[m].interceptBit!=null&&
+                   //               that.dataSource[m].interceptBit.indexOf('bitIndex')!=-1)||
+                                that.dataSource[m].address.indexOf('.')!=-1)){
                                 var tmpinstruct=that.dataSource[m].instruct;
                                 var tmpaddress=that.dataSource[m].address;
+                                var tmpadd=tmpaddress.split(".");
                                 let filterList={};
-                                filterList = that.dataSource.filter(item => item.address === tmpaddress);
+                                filterList = that.dataSource.filter(item => (item.address.split("."))[0] === tmpadd[0]);
                                 var tmpint=parseInt(r4[1]).toString(2);
                                 var a0=(Array(16).join(0) + tmpint).slice(-16);
                                 for(var n=0;n<filterList.length;n++){
                                   var item=filterList[n];
-                                  var a1=item.interceptBit;
+                              //    var a1=item.interceptBit;
+                                  var a1=item.address;
                                   if(a1!=null && a1!=""){
-                                    var a2=a1.split(',');
-                                    var a3=a2[0].split(':');
+//                                    var a2=a1.split(',');
+//                                    var a3=a2[0].split(':');
+                                    var a3=a1.split('.');
                                     var a4=parseInt(a3[1]);
                                     var a5=15-a4;
                                     item.dataReturn=a0.substring(a5,a5+1);

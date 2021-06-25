@@ -1,11 +1,11 @@
 <template>
   <page-layout :title="title">
     <a-card :bordered="false">
-      <detail-list title="退款申请">
-        <detail-list-item term="取货单号">1000000000</detail-list-item>
-        <detail-list-item term="状态">已取货</detail-list-item>
+      <detail-list title="退款申请" >
+        <detail-list-item :term="item.text" v-for="(item,index) in registerTypeList" :key=" 'registerType'+index ">{{ item.text }}</detail-list-item>
+<!--        <detail-list-item term="状态">已取货</detail-list-item>
         <detail-list-item term="销售单号">1234123421</detail-list-item>
-        <detail-list-item term="子订单">3214321432</detail-list-item>
+        <detail-list-item term="子订单">3214321432</detail-list-item>  -->
       </detail-list>
       <a-divider style="margin-bottom: 32px"/>
       <detail-list title="用户信息">
@@ -19,16 +19,16 @@
 
       <div class="title">退货商品</div>
       <s-table
-        style="margin-bottom: 24px" 
-        :columns="goodsColumns" 
+        style="margin-bottom: 24px"
+        :columns="goodsColumns"
         :data="loadGoodsData">
 
       </s-table>
 
       <div class="title">退货进度</div>
       <s-table
-        style="margin-bottom: 24px" 
-        :columns="scheduleColumns" 
+        style="margin-bottom: 24px"
+        :columns="scheduleColumns"
         :data="loadScheduleData">
 
         <template
@@ -59,6 +59,15 @@
     },
     data () {
       return {
+        registerTypeList:[{
+          text:"业务受理"
+        },{
+          text:"业务管理"
+        },{
+          text:"文件管理"
+        },{
+          text:"信息查询"
+        }],
         goodsColumns: [
           {
             title: '商品编号',

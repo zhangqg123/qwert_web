@@ -6,7 +6,7 @@
           <a-card>
             <div slot="title" class="index-md-title">
               <img src="../../assets/daiban.png"/>
-              我的待办【{{ dataSource1.length }}】
+              大连分行【{{ dataSource1.length }}】
             </div>
             <div slot="extra">
               <a v-if="dataSource1 && dataSource1.length>0" slot="footer" @click="goPage">更多 <a-icon type="double-right" /></a>
@@ -39,7 +39,7 @@
           <a-card>
             <div slot="title" class="index-md-title">
               <img src="../../assets/zaiban.png"/>
-              我的在办【{{ dataSource2.length }}】
+              大连支行【{{ dataSource2.length }}】
             </div>
             <div slot="extra">
               <a v-if="dataSource2 && dataSource2.length>0" slot="footer" @click="goPage">更多 <a-icon type="double-right" /></a>
@@ -76,7 +76,7 @@
           <a-card>
             <div slot="title" class="index-md-title">
               <img src="../../assets/guaz.png"/>
-              我的挂账【{{ dataSource4.length }}】
+              丹东分行【{{ dataSource4.length }}】
             </div>
             <a-table
               :class="'my-index-table tytable4'"
@@ -106,7 +106,7 @@
           <a-card>
             <div slot="title" class="index-md-title">
               <img src="../../assets/duban.png"/>
-              我的督办【{{ dataSource3.length }}】
+              营口分行【{{ dataSource3.length }}】
             </div>
             <a-table
               :class="'my-index-table tytable3'"
@@ -145,53 +145,53 @@
   const tempSs1=[{
     id:"001",
     orderNo:"电[1]1267102",
-    orderTitle:"药品出问题了",
+    orderTitle:"UPS",
     restDay:1
   },{
     id:"002",
     orderNo:"电[4]5967102",
-    orderTitle:"吃了xxx医院的药，病情越来越严重",
+    orderTitle:"空调",
     restDay:0
   },{
     id:"003",
     orderNo:"电[3]5988987",
-    orderTitle:"今天去超市买鸡蛋，鸡蛋都是坏的",
+    orderTitle:"温湿度",
     restDay:7
   },{
     id:"004",
     orderNo:"电[2]5213491",
-    orderTitle:"xx宝实体店高价售卖xx",
+    orderTitle:"漏水",
     restDay:5
   },{
     id:"005",
     orderNo:"电[1]1603491",
-    orderTitle:"以红利相诱，答应退保后扣一年费用",
+    orderTitle:"开关量",
     restDay:0
   }]
 
   const tempSs2=[{
     id:"001",
-    orderTitle:"我要投诉这个大超市",
+    orderTitle:"台达UPS",
     orderNo:"电[1]10299456",
     restDay:6
   },{
     id:"002",
-    orderTitle:"xxx医院乱开药方,售卖假药",
+    orderTitle:"科士达UPS",
     orderNo:"电[2]20235691",
     restDay:0
   },{
     id:"003",
-    orderTitle:"我想问问这家店是干啥的",
+    orderTitle:"温湿度",
     orderNo:"电[3]495867322",
     restDay:7
   },{
     id:"004",
-    orderTitle:"我要举报朝阳区奥森公园酒店",
+    orderTitle:"漏水",
     orderNo:"电[2]1193849",
     restDay:3
   },{
     id:"005",
-    orderTitle:"我今天吃饭吃到一个石头子",
+    orderTitle:"大金空调",
     orderNo:"电[4]56782344",
     restDay:9
   }]
@@ -225,19 +225,19 @@
             scopedSlots: {customRender: "dayWarnning"}
           },
           {
-            title:'剩余天数',
+            title:'数量',
             align:"center",
             dataIndex: 'restDay',
             width:80
           },
           {
-            title:'工单标题',
+            title:'设备名称',
             align:"center",
             dataIndex: 'orderTitle',
             scopedSlots: {customRender: "ellipsisText"}
           },
           {
-            title:'工单编号',
+            title:'设备编号',
             align:"center",
             dataIndex: 'orderNo',
           },

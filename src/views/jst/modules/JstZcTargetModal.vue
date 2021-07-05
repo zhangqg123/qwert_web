@@ -75,6 +75,10 @@
         <a-form-item label="截取位" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input v-decorator="[ 'interceptBit', validatorRules.interceptBit]" placeholder="请输入截取位"></a-input>
         </a-form-item>
+        <a-form-item label="显示模式" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <j-dict-select-tag  v-decorator="['displayMode', {}]" :triggerChange="true" placeholder="请输入显示模式"
+                              dictCode="display_mode"/>
+        </a-form-item>
 <!--
         <a-form-item label="采集时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input v-decorator="[ 'getTime', validatorRules.getTime]" placeholder="请输入采集时间"></a-input>
@@ -200,6 +204,8 @@
           ]},
           targetOrder: {rules: [
           ]},
+          displayMode: {rules: [
+            ]},
         },
         url: {
           add: "/jst/jstZcTarget/add",
@@ -219,7 +225,7 @@
         this.visible = true;
         this.infoType=this.model.infoType;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'devType','targetNo','targetName','unit','ifGet','dataType','proType','address','addressType','instruct','evt01','evt10','valMin','restoreMin','restoreMax','valMax','getTime','offset','len','interceptBit','espConfig','monitorType','infoType','infoDatatype','infoDataaccurate','alarmPoint','ctrlUp','ctrlDown','yinzi','targetOrder'))
+          this.form.setFieldsValue(pick(this.model,'devType','targetNo','targetName','unit','ifGet','dataType','proType','address','addressType','instruct','evt01','evt10','valMin','restoreMin','restoreMax','valMax','getTime','offset','len','interceptBit','espConfig','monitorType','infoType','infoDatatype','infoDataaccurate','alarmPoint','ctrlUp','ctrlDown','yinzi','targetOrder','displayMode'))
         })
       },
       close () {
@@ -262,7 +268,7 @@
         this.close()
       },
       popupCallback(row){
-        this.form.setFieldsValue(pick(row,'devType','targetNo','targetName','unit','ifGet','dataType','proType','address','addressType','instruct','evt01','evt10','valMin','restoreMin','restoreMax','valMax','getTime','offset','len','interceptBit','espConfig','monitorType','infoType','infoDatatype','infoDataaccurate','alarmPoint','ctrlUp','ctrlDown','targetOrder'))
+        this.form.setFieldsValue(pick(row,'devType','targetNo','targetName','unit','ifGet','dataType','proType','address','addressType','instruct','evt01','evt10','valMin','restoreMin','restoreMax','valMax','getTime','offset','len','interceptBit','espConfig','monitorType','infoType','infoDatatype','infoDataaccurate','alarmPoint','ctrlUp','ctrlDown','targetOrder','displayMode'))
       },
       handleChangeInfoType(value){
         this.infoType = value;

@@ -100,6 +100,20 @@
             下载
           </a-button>
         </template>
+        <div slot="filterDropdown">
+          <a-card>
+            <a-checkbox-group @change="onColSettingsChange" v-model="settingColumns" :defaultValue="settingColumns">
+              <a-row style="width: 400px">
+                <template v-for="(item,index) in defColumns">
+                  <template v-if="item.key!='rowIndex'&& item.dataIndex!='action'">
+                    <a-col :span="12"><a-checkbox :value="item.dataIndex"><j-ellipsis :value="item.title" :length="10"></j-ellipsis></a-checkbox></a-col>
+                  </template>
+                </template>
+              </a-row>
+            </a-checkbox-group>
+          </a-card>
+        </div>
+        <a-icon slot="filterIcon" type='setting' :style="{ fontSize:'16px',color:  '#108ee9' }" />
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
@@ -129,6 +143,7 @@
   import JstZcTargetModal from './modules/JstZcTargetModal'
   import JInput from '@/components/jeecg/JInput.vue';
   import { deleteAction, getAction,downFile,getFileAccessHttpUrl } from '@/api/manage'
+  import Vue from 'vue'
 
   export default {
     name: "JstZcTargetList",
@@ -146,8 +161,12 @@
         dictCode3: {
           val:"jst_zc_dev,dev_name,dev_no,org_user='guangfa'"
         },        // 表头
+      //表头
+        columns:[],
+        //列设置
+        settingColumns:[],
         // 表头
-        columns: [
+        defColumns: [
           {
             title: '#',
             dataIndex: '',
@@ -173,12 +192,12 @@
             align:"center",
             dataIndex: 'targetName'
           },
-/*          {
-            title:'单位',
+          {
+            title:'显示模式',
             align:"center",
-            dataIndex: 'unit'
+            dataIndex: 'displayMode_dictText'
           },
-
+/*
           {
             title:'协议',
             align:"center",
@@ -230,7 +249,10 @@
             title: '操作',
             dataIndex: 'action',
             align:"center",
-            scopedSlots: { customRender: 'action' }
+            scopedSlots: {
+              filterDropdown: 'filterDropdown',
+              filterIcon: 'filterIcon',
+              customRender: 'action'}
           }
         ],
         url: {
@@ -313,9 +335,56 @@
         this.queryParam.devType=value;
         this.$set(this.dictCode3, "val", tmp2);
       },
+      //列设置更改事件
+      onColSettingsChange (checkedValues) {
+        var key = this.$route.name+":colsettings";
+        Vue.ls.set(key, checkedValues, 7 * 24 * 60 * 60 * 1000)
+        this.settingColumns = checkedValues;
+        const cols = this.defColumns.filter(item => {
+          if(item.key =='rowIndex'|| item.dataIndex=='action'){
+            return true
+          }
+          if (this.settingColumns.includes(item.dataIndex)) {
+            return true
+          }
+          return false
+        })
+        this.columns =  cols;
+      },
+      initColumns(){
+        //权限过滤（列权限控制时打开，修改第二个参数为授权码前缀）
+        //this.defColumns = colAuthFilter(this.defColumns,'testdemo:');
+
+        var key = this.$route.name+":colsettings";
+        let colSettings= Vue.ls.get(key);
+        if(colSettings==null||colSettings==undefined){
+          let allSettingColumns = [];
+          this.defColumns.forEach(function (item,i,array ) {
+            allSettingColumns.push(item.dataIndex);
+          })
+          this.settingColumns = allSettingColumns;
+          this.columns = this.defColumns;
+        }else{
+          this.settingColumns = colSettings;
+          const cols = this.defColumns.filter(item => {
+            if(item.key =='rowIndex'|| item.dataIndex=='action'){
+              return true;
+            }
+            if (colSettings.includes(item.dataIndex)) {
+              return true;
+            }
+            return false;
+          })
+          this.columns =  cols;
+        }
+      },
       initDictConfig(){
       }
-    }
+    },
+    created() {
+      this.initColumns();
+    },
+
   }
 </script>
 <style scoped>

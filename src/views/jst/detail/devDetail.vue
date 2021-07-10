@@ -8,13 +8,13 @@
         <detail-list-item term="子订单">3214321432</detail-list-item>  -->
       </detail-list>
       <a-divider style="margin-bottom: 32px"/>
-      <detail-list title="用户信息">
+<!--      <detail-list title="用户信息">
         <detail-list-item term="用户姓名">付小小</detail-list-item>
         <detail-list-item term="联系电话">18100000000</detail-list-item>
         <detail-list-item term="常用快递">菜鸟仓储</detail-list-item>
         <detail-list-item term="取货地址">浙江省杭州市西湖区万塘路18号</detail-list-item>
         <detail-list-item term="备注">	无</detail-list-item>
-      </detail-list>
+      </detail-list>  -->
       <a-divider style="margin-bottom: 32px"/>
 
 
@@ -28,6 +28,7 @@
   import DetailList from '@/components/tools/DetailList'
   import ABadge from "ant-design-vue/es/badge/Badge"
   import { getAction } from '@/api/manage'
+//  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 
   const DetailListItem = DetailList.Item
 
@@ -39,6 +40,7 @@
       DetailList,
       DetailListItem,
       STable,
+//      JeecgListMixin
     },
     data () {
       return {
@@ -141,13 +143,9 @@
         return statusMap[status]
       }
     },
-    computed: {
-      title () {
-        return this.$route.meta.title
-      }
-    },
     created() {
-      this.loadData(111);
+      var code=this.$route.params.code;
+      this.loadData(code);
     },
     methods: {
       loadData(arg) {
@@ -155,6 +153,7 @@
           return;
         }
         var code=this.$route.params.code;
+        var code=arg;
         if(!this.url.devRedis){
           this.$message.error("请设置url.list属性!")
           return
@@ -181,7 +180,21 @@
       },
       initDictConfig(){
       },
-    }
+    },
+    computed: {
+//      key() {
+//        this.loadData(this.$route.params.code);
+//        return this.$route.name !== undefined? this.$route.name +new Date(): this.$route +new Date()
+//      },
+      title () {
+        return this.$route.meta.title
+      }
+    },
+    watch: { //通过watch来监听路由变化
+      "$route": function() {
+        this.loadData(this.$route.params.code);
+      }
+    },
 
   }
 </script>

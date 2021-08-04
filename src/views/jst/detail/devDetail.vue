@@ -8,6 +8,9 @@
         <detail-list-item term="子订单">3214321432</detail-list-item>  -->
       </detail-list>
       <a-divider style="margin-bottom: 32px"/>
+      <detail-list title="环控点 2" >
+        <detail-list-item :term="item.targetName" v-for="(item,index) in targets2" :key="index">{{ item.value }}</detail-list-item>
+      </detail-list>
 <!--      <detail-list title="用户信息">
         <detail-list-item term="用户姓名">付小小</detail-list-item>
         <detail-list-item term="联系电话">18100000000</detail-list-item>
@@ -47,6 +50,7 @@
         loading: false,
         devName: null,
         targets: [],
+        targets2: [],
         url: {
           list: "/jst/qwertFc/list",
           devRedis: "/jst/qwertFc/devRedis",
@@ -169,7 +173,9 @@
           if (res.success) {
             this.devName=res.message;
              var tmpResult=res.result;
-             this.targets = JSON.parse(tmpResult);
+             let tr=JSON.parse(tmpResult);
+            this.targets = tr.filter(item=> item.displayMode !==0)
+            this.targets2 = tr.filter(item=> item.displayMode ===0)
    //          this.registerTypeList=res.result;
           }
           if(res.code===510){

@@ -9,7 +9,7 @@
       </a-form>
     </div>
     <!-- 查询区域-END -->
-    
+
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
@@ -50,8 +50,12 @@
         :pagination="ipagination"
         :loading="loading"
         :rowSelection="{fixed:true,selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
-        
+
         @change="handleTableChange">
+        <!-- 字符串超长截取省略号显示-->
+        <span slot="alarmValueRender" slot-scope="text">
+          <j-ellipsis :value="text" :length="20" />
+        </span>
 
         <template slot="htmlSlot" slot-scope="text">
           <div v-html="text"></div>
@@ -143,7 +147,9 @@
           {
             title:'报警值',
             align:"center",
-            dataIndex: 'alarmValue'
+            width: 250,
+            dataIndex: 'alarmValue',
+            scopedSlots: {customRender: 'alarmValueRender'}
           },
           {
             title:'报警级别',

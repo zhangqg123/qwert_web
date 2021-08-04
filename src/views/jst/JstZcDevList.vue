@@ -101,6 +101,20 @@
             下载
           </a-button>
         </template>
+        <div slot="filterDropdown">
+          <a-card>
+            <a-checkbox-group @change="onColSettingsChange" v-model="settingColumns" :defaultValue="settingColumns">
+              <a-row style="width: 400px">
+                <template v-for="(item,index) in defColumns">
+                  <template v-if="item.key!='rowIndex'&& item.dataIndex!='action'">
+                    <a-col :span="12"><a-checkbox :value="item.dataIndex"><j-ellipsis :value="item.title" :length="10"></j-ellipsis></a-checkbox></a-col>
+                  </template>
+                </template>
+              </a-row>
+            </a-checkbox-group>
+          </a-card>
+        </div>
+        <a-icon slot="filterIcon" type='setting' :style="{ fontSize:'16px',color:  '#108ee9' }" />
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
@@ -135,6 +149,7 @@
   import { multipleRead, readClose,readAmq } from '@/api/api';
   import pick from 'lodash.pick'
   import SelectCatTargetListModal from './modules/SelectCatTargetListModal'
+  import Vue from 'vue'
 
   export default {
     name: "JstZcDevList",
@@ -153,8 +168,14 @@
         },        // 表头
         dictCode4: {
           val:"jst_zc_position,pos_name,pos_id "
-        },        // 表头
-        columns: [
+        },
+        // 表头
+        //表头
+        columns:[],
+        //列设置
+        settingColumns:[],
+        //列定义
+        defColumns: [
           {
             title: '#',
             dataIndex: '',
@@ -181,14 +202,19 @@
             dataIndex: 'devNo'
           },
           {
+            title:'模型编号',
+            align:"center",
+            dataIndex: 'modNo'
+          },
+          {
             title:'位置',
             align:"center",
             dataIndex: 'devPos_dictText'
           },
           {
-            title:'详细位置',
+            title:'位置编号',
             align:"center",
-            dataIndex: 'position'
+            dataIndex: 'devPos'
           },
           {
             title:'状态',
@@ -199,7 +225,11 @@
             title: '操作',
             dataIndex: 'action',
             align:"center",
-            scopedSlots: { customRender: 'action' }
+//            scopedSlots: { customRender: 'action' }
+            scopedSlots: {
+              filterDropdown: 'filterDropdown',
+              filterIcon: 'filterIcon',
+              customRender: 'action'},
           }
         ],
         url: {
@@ -219,6 +249,10 @@
         return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
       }
     },
+    created() {
+      this.initColumns();
+    },
+
     methods: {
       loadData(arg) {
         if(!this.url.list){
@@ -244,6 +278,48 @@
           }
           this.loading = false;
         })
+      },
+      onColSettingsChange (checkedValues) {
+        var key = this.$route.name+":colsettings";
+        Vue.ls.set(key, checkedValues, 7 * 24 * 60 * 60 * 1000)
+        this.settingColumns = checkedValues;
+        const cols = this.defColumns.filter(item => {
+          if(item.key =='rowIndex'|| item.dataIndex=='action'){
+            return true
+          }
+          if (this.settingColumns.includes(item.dataIndex)) {
+            return true
+          }
+          return false
+        })
+        this.columns =  cols;
+      },
+      initColumns(){
+        //权限过滤（列权限控制时打开，修改第二个参数为授权码前缀）
+        //this.defColumns = colAuthFilter(this.defColumns,'testdemo:');
+
+        var key = this.$route.name+":colsettings";
+        let colSettings= Vue.ls.get(key);
+        if(colSettings==null||colSettings==undefined){
+          let allSettingColumns = [];
+          this.defColumns.forEach(function (item,i,array ) {
+            allSettingColumns.push(item.dataIndex);
+          })
+          this.settingColumns = allSettingColumns;
+          this.columns = this.defColumns;
+        }else{
+          this.settingColumns = colSettings;
+          const cols = this.defColumns.filter(item => {
+            if(item.key =='rowIndex'|| item.dataIndex=='action'){
+              return true;
+            }
+            if (colSettings.includes(item.dataIndex)) {
+              return true;
+            }
+            return false;
+          })
+          this.columns =  cols;
+        }
       },
       initDictConfig(){
       },

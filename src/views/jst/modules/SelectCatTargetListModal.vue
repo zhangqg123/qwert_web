@@ -373,7 +373,8 @@
                         r1=r1.replace(/\s*/g,"");
                         var r2=r1.split('=');
                         for (var m = 0; m < that.dataSource.length; m++) {
-                          if(r2[0]==that.dataSource[m].instruct){
+           //               if(r2[0]==that.dataSource[m].instruct){
+                          if(r2[0]==that.dataSource[m].targetNo){
                             that.dataSource[m].dataReturn=r2[1];
                             break;
                           }

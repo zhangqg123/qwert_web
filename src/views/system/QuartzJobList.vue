@@ -7,13 +7,16 @@
         <a-row :gutter="24">
 
           <a-col :md="6" :sm="10">
-            <a-form-model-item label="任务类名" prop="jobClassName">
+          <!--  <a-form-model-item label="任务类名" prop="jobClassName">
               <a-input placeholder="请输入任务类名" v-model="queryParam.jobClassName"></a-input>
-            </a-form-model-item>
+            </a-form-model-item> -->
+            <a-form-item label="用户">
+              <j-dict-select-tag dictCode="jst_zc_orguser,orguser_name,orguser_id" v-model="queryParam.orgUser" placeholder="请输入单位" />
+            </a-form-item>
           </a-col>
           <a-col :md="6" :sm="10">
             <a-form-model-item label="任务状态" prop="status">
-              <a-select style="width: 220px" v-model="queryParam.status" placeholder="请选择状态">
+              <a-select style="width: 200px" v-model="queryParam.status" placeholder="请选择状态">
                 <a-select-option value="">全部</a-select-option>
                 <a-select-option value="0">正常</a-select-option>
                 <a-select-option value="-1">停止</a-select-option>
@@ -67,6 +70,9 @@
         @change="handleTableChange">
 
         <!-- 字符串超长截取省略号显示-->
+        <span slot="jobClassName" slot-scope="text">
+          <j-ellipsis :value="text" :length="20" />
+        </span>
         <span slot="description" slot-scope="text">
           <j-ellipsis :value="text" :length="20" />
         </span>
@@ -142,10 +148,17 @@
             title: '任务类名',
             align:"center",
             dataIndex: 'jobClassName',
+            width: 150,
+            scopedSlots: {customRender: 'jobClassName'},
             sorter: true,
 /*            customRender:function (text) {
               return "*"+text.substring(9,text.length);
             }*/
+          },
+          {
+            title: '所属用户',
+            align:"center",
+            dataIndex: 'orgUser_dictText'
           },
           {
             title: 'cron表达式',

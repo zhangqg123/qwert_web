@@ -79,7 +79,12 @@
           <j-dict-select-tag  v-decorator="['displayMode', {}]" :triggerChange="true" placeholder="请输入显示模式"
                               dictCode="display_mode"/>
         </a-form-item>
-<!--
+        <a-form-item label="是否采集" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <j-dict-select-tag  v-decorator="['ifGet', {}]" :triggerChange="true" placeholder="请输入是否采集"
+                              dictCode="if_get"/>
+        </a-form-item>
+
+        <!--
         <a-form-item label="采集时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input v-decorator="[ 'getTime', validatorRules.getTime]" placeholder="请输入采集时间"></a-input>
         </a-form-item>
@@ -106,9 +111,6 @@
         </a-form-item>
         <a-form-item label="单位" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input v-decorator="[ 'unit', validatorRules.unit]" placeholder="请输入单位"></a-input>
-        </a-form-item>
-        <a-form-item label="是否采集" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input v-decorator="[ 'ifGet', validatorRules.ifGet]" placeholder="请输入是否采集"></a-input>
         </a-form-item>
         <a-form-item label="协议" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input v-decorator="[ 'proType', validatorRules.proType]" placeholder="请输入协议"></a-input>

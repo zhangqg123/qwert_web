@@ -31,6 +31,10 @@
 <!--          <j-cron ref="innerVueCron" v-decorator="['cronExpression', {'initialValue':'0/1 * * * * ?',rules: [{ required: true, message: '请输入cron表达式!' }]}]"  @change="setCorn"></j-cron>-->
           <j-cron ref="innerVueCron" v-decorator="['cronExpression', { initialValue: '* * * * * ? *' }]" @change="setCorn"></j-cron>
         </a-form-item>
+        <a-form-item label="所属用户" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <j-dict-select-tag  v-decorator="['orgUser', {}]" :triggerChange="true" placeholder="请输入所属用户"
+                              dictCode="jst_zc_orguser,orguser_name,orguser_id"/>
+        </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -111,7 +115,7 @@
         console.log(this.model)
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'jobClassName','cronExpression','parameter','description','status'));
+          this.form.setFieldsValue(pick(this.model,'jobClassName','cronExpression','orgUser','parameter','description','status'));
         });
 
       },

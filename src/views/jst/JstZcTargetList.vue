@@ -15,9 +15,11 @@
             </a-form-item>
           </a-col>
           <a-col :md="4" :sm="8">
-            <a-form-item label="报警点">
-              <!--            <a-input placeholder="请输入模型编号" v-model="queryParam.devicemodel"></a-input>  -->
+    <!--        <a-form-item label="报警点">
               <j-dict-select-tag v-model="queryParam.alarmPoint" placeholder="请选择报警点" dictCode="alarm_point"/>
+            </a-form-item> -->
+            <a-form-item label="地点">
+              <j-dict-select-tag @change="handleChangePos" :triggerChange="true" v-model="queryParam.devPos" placeholder="请选择地点" :dictCode="dictCode4.val" />
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="8">
@@ -160,6 +162,9 @@
         },        // 表头
         dictCode3: {
           val:"jst_zc_dev,dev_name,dev_no,org_user='guangfa'"
+        },        // 表头
+        dictCode4: {
+          val:"jst_zc_position,pos_name,pos_id "
         },        // 表头
       //表头
         columns:[],
@@ -310,9 +315,11 @@
       handleChangeOrgUser(value){
         var tmp=null;
         var tmp2=null;
+        var tmp4=null;
         if(value!=null){
           tmp = "jst_zc_cat,zc_catname,origin_id,org_user= '"+value+"'&&has_child ='0'&&id>'002' order by pid ";
           tmp2 = "jst_zc_dev,dev_name,dev_no,org_user= '"+value+"'";
+          tmp4 = "jst_zc_position,pos_name,pos_id,org_user= '"+value+"'";
         }else{
           tmp = "jst_zc_cat,zc_catname,origin_id,has_child ='0'&&id>'002' order by pid ";
           tmp2 = "jst_zc_dev,dev_name,dev_no,org_user= 'guangfa'";
@@ -322,6 +329,23 @@
 //        this.queryParam.devNo=null;
         this.$set(this.dictCode2, "val", tmp);
         this.$set(this.dictCode3, "val", tmp2);
+        this.$set(this.dictCode4, "val", tmp4);
+      },
+      handleChangePos(value){
+  //      var tmp=null;
+        var tmp2=null;
+  //      var tmp4=null;
+        if(value!=null){
+  //        tmp = "jst_zc_cat,zc_catname,origin_id,org_user= '"+value+"'&&has_child ='0'&&id>'002' order by pid ";
+          tmp2 = "jst_zc_dev,dev_name,dev_no,dev_pos= '"+value+"'";
+  //        tmp4 = "jst_zc_position,pos_name,pos_id,org_user= '"+value+"'";
+        }else{
+  //        tmp = "jst_zc_cat,zc_catname,origin_id,has_child ='0'&&id>'002' order by pid ";
+          tmp2 = "jst_zc_dev,dev_name,dev_no,org_user= '"+this.queryParam.orgUser+"'";
+        }
+        this.queryParam.devPos=value;
+        this.$set(this.dictCode3, "val", tmp2);
+//        this.queryParam.devNo=null;
       },
       handleChangeType(value){
         var tmp2=null;
